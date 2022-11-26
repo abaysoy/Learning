@@ -1,0 +1,32 @@
+## To make a perl script 
+ Use command: vi testscript.pl 
+ every perl script must start with  #!/usr/bin/perl
+
+
+
+use warnings;
+use Getopt::Long;
+use File::Basename;
+use PerlIO::gzip;
+my $usage=<<USAGE;
+Usage
+        perl $0
+        indir   <indir>
+        outdir  <out_dir>
+        insertsize <insertsize>
+USAGE
+my ($indir,$outdir,$insertsize,$help);
+GetOptions(
+    "indir=s"=>\$indir,
+    "outdir=s"=>\$outdir,
+    "insertsize=s"=>\$insertsize,
+);
+die $usage if $help;
+die $usage unless  $indir && $outdir && $insertsize;
+`mkdir $outdir/$insertsize` unless(-d "$outdir/$insertsize");
+open LOG,">$outdir/$insertsize/log" or die $!;
+print LOG "$insertsize filter primer begin at: ".`date`;
+chomp (my $file2 = `ls $indir/$insertsize/*2.fq.gz`);
+chomp (my $file1 = `ls $indir/$insertsize/*1.fq.gz`);
+# /gpfs/ysm/project/fan/gs592/02_Spatial_Hippocampus_DG/01.rawdata/test/
+chomp (my $barcodefile = `ls /gpfs/gibbs/pi/fan/aeb98/00.database/barcode.xls`);
